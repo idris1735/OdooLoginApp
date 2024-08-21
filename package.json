@@ -9,10 +9,17 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@fernandoslim/odoo-jsonrpc": "^1.9.4",
+    "axios": "^1.7.4",
     "expo": "~51.0.26",
     "expo-status-bar": "~1.12.1",
+    "odoo-react": "^1.0.2",
+    "odoo-xmlrpc": "^1.0.8",
     "react": "18.2.0",
-    "react-native": "0.74.5"
+    "react-native": "0.74.5",
+    "react-native-odoo-promise-based": "^0.6.8",
+    "react-native-paper": "^5.12.5",
+    "react-native-webview": "13.8.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
