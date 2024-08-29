@@ -15,6 +15,7 @@ const WebViewScreen = () => {
   const [cookies, setCookies] = useState(null)
   const [loading, setLoading] = useState(true)
   const webViewRef = useRef(null)
+  const [redirectToMain, setRedirectToMain] = useState(false)
 
   useEffect(() => {
     const fetchCookies = async () => {
@@ -48,6 +49,14 @@ const WebViewScreen = () => {
 
   const handleWebViewLoadEnd = () => {
     setLoading(false)
+
+    if (!redirectToMain) {
+      // Redirect to the main page after the cookies have been injected
+      setTimeout(() => {
+        setRedirectToMain(true)
+        webViewRef.current.injectJavaScript(`window.location.href = "/web";`)
+      }, 2000) // Adjust the delay as needed
+    }
   }
 
   const handleWebViewError = async (error) => {
@@ -83,7 +92,10 @@ const WebViewScreen = () => {
             await AsyncStorage.setItem('cookies', JSON.stringify(newCookies))
             setCookies(newCookies)
 
+            console.log('new cookies', newCookies)
+
             webViewRef.current.reload()
+            console.log('reloading page')
           } else {
             console.error('Re-login failed: No session ID returned.')
           }
@@ -114,11 +126,11 @@ const WebViewScreen = () => {
       )}
       <WebView
         ref={webViewRef}
-        source={{ uri: 'https://juniperp.com' }}
+        source={{ uri: 'https://juniperp.com/web/login' }}
         injectedJavaScript={`document.cookie="${cookieString}";`}
-        onLoadEnd={handleWebViewLoadEnd} // Handle loading end
-        onError={handleWebViewError} // Handle WebView errors
-        style={styles.webview} // Remove header padding
+        onLoadEnd={handleWebViewLoadEnd}
+        onError={handleWebViewError}
+        style={styles.webview}
       />
     </View>
   )
@@ -140,7 +152,6 @@ const styles = StyleSheet.create({
   },
   webview: {
     flex: 1,
-    // marginTop: -50, // Adjust this value to remove the header
   },
 })
 
